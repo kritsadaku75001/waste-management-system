@@ -1192,7 +1192,7 @@
             if (data && data.length > 0) {
                 data.forEach(h => {
                     const typeBadge = h.customer_type === 'business' ? '<span class="px-2 py-0.5 bg-purple-100 text-purple-800 rounded text-xs font-bold">กิจการ</span>' : '<span class="px-2 py-0.5 bg-blue-100 text-blue-800 rounded text-xs font-bold">ครัวเรือน</span>';
-                    const binCountDisplay = h.customer_type === 'business' ? '-' : `${h.bin_count || 1} ถัง`;
+                    const binCountDisplay = `${h.bin_count || 1} ถัง`;
                     const rateDisplay = h.customer_type === 'business' ? 'ตามปริมาณขยะ (ลิตร)' : `${((h.bin_count || 1) * 15).toLocaleString()} บาท`;
 
                     tbody.innerHTML += `
