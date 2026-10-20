@@ -226,8 +226,8 @@
                         </div>
                         <div class="bg-[#FAF8F5] p-4 rounded-lg border border-[#EBE3D8] grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-medium mb-1">ปริมาณขยะต่อวัน (ลิตร) *</label>
-                                <input type="number" id="waste-volume" required oninput="previewWasteFee()" placeholder="เช่น 25" class="w-full px-4 py-2 bg-white border border-stone-300 rounded-lg focus:ring-2 focus:ring-[#2E5A44]">
+                                <label class="block text-sm font-medium mb-1">ปริมาณขยะ (ลิตร) *</label>
+                                <input type="number" id="waste-volume" required oninput="previewWasteFee()" placeholder="เช่น 200" class="w-full px-4 py-2 bg-white border border-stone-300 rounded-lg focus:ring-2 focus:ring-[#2E5A44]">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium mb-1">ค่าธรรมเนียมประเมินได้</label>
@@ -259,7 +259,7 @@
                                         <th class="p-3">บ้านเลขที่</th>
                                         <th class="p-3">เจ้าบ้าน</th>
                                         <th class="p-3">ประจำเดือน/ปี</th>
-                                        <th class="p-3">ปริมาณขยะ/วัน</th>
+                                        <th class="p-3">ปริมาณขยะ (ลิตร)</th>
                                         <th class="p-3">ค่าบริการ/เดือน</th>
                                         <th class="p-3 text-center">จัดการ</th>
                                     </tr>
@@ -275,7 +275,7 @@
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                         <div>
                             <h2 class="text-xl font-bold text-[#1B3B2B]">📉 รายงานสรุปปริมาณขยะตามช่วงเวลา</h2>
-                            <p class="text-xs text-stone-500 mt-0.5">วิเคราะห์สถิติปริมาณขยะที่ถูกบันทึกในระบบ สามารถแยกดูตามหมู่บ้านหรือบุคคลได้</p>
+                            <p class="text-xs text-stone-500 mt-0.5">รวมปริมาณขยะตามเดือนที่บันทึกจริงในช่วงเวลาที่เลือก</p>
                         </div>
                         <button onclick="exportWasteReportExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm flex items-center space-x-1">
                             <span>📥 ส่งออกรายงาน Excel</span>
@@ -334,12 +334,12 @@
                         <div class="bg-white p-6 rounded-xl shadow-sm border border-[#EBE3D8]">
                             <p class="text-xs font-semibold text-stone-500 uppercase">ปริมาณขยะรวมสะสม</p>
                             <h3 id="report-stat-total-volume" class="text-3xl font-bold text-[#2E5A44] mt-2">0 <span class="text-base font-normal text-stone-600">ลิตร</span></h3>
-                            <p class="text-xs text-stone-400 mt-1">คำนวณจากเดือนที่เลือกทั้งหมด</p>
+                            <p class="text-xs text-stone-400 mt-1">รวมผลรวมจากทุกเดือนที่เลือก</p>
                         </div>
                         <div class="bg-white p-6 rounded-xl shadow-sm border border-[#EBE3D8]">
-                            <p class="text-xs font-semibold text-stone-500 uppercase">ค่าเฉลี่ยปริมาณขยะต่อวัน</p>
-                            <h3 id="report-stat-avg-daily" class="text-3xl font-bold text-emerald-600 mt-2">0 <span class="text-base font-normal text-stone-600">ลิตร/วัน</span></h3>
-                            <p class="text-xs text-stone-400 mt-1">เฉลี่ยต่อครัวเรือนในรายงาน</p>
+                            <p class="text-xs font-semibold text-stone-500 uppercase">จำนวนเดือนที่มีการบันทึก</p>
+                            <h3 id="report-stat-total-months" class="text-3xl font-bold text-emerald-600 mt-2">0 <span class="text-base font-normal text-stone-600">เดือน</span></h3>
+                            <p class="text-xs text-stone-400 mt-1">รวมจำนวนรอบเดือนทั้งหมด</p>
                         </div>
                         <div class="bg-white p-6 rounded-xl shadow-sm border border-[#EBE3D8]">
                             <p class="text-xs font-semibold text-stone-500 uppercase">ประมาณการน้ำหนักขยะรวม</p>
@@ -361,10 +361,8 @@
                                         <th class="p-3">บ้านเลขที่</th>
                                         <th class="p-3">หมู่บ้าน</th>
                                         <th class="p-3">ชื่อเจ้าบ้าน</th>
-                                        <th class="p-3 text-right">ปริมาณขยะต่อวัน (ลิตร)</th>
                                         <th class="p-3 text-right">จำนวนเดือนที่บันทึก</th>
-                                        <th class="p-3 text-right">ปริมาณขยะสะสมช่วงที่เลือก (ลิตร)</th>
-                                        <th class="p-3 text-right">ค่าธรรมเนียมประเมินได้/เดือน</th>
+                                        <th class="p-3 text-right">ปริมาณขยะรวมสะสมช่วงที่เลือก (ลิตร)</th>
                                     </tr>
                                 </thead>
                                 <tbody id="waste-report-tbody" class="divide-y divide-stone-100"></tbody>
@@ -937,7 +935,7 @@
                 .maybeSingle();
 
             if (data && data.id !== editId) {
-                warningEl.textContent = `⚠️ แจ้งเตือน: บ้านหลังนี้ได้บันทึกข้อมูลของเดือน ${monthNames[month]} พ.ศ. ${year_th} ไปแล้ว (${data.daily_volume} ลิตร/วัน) การบันทึกจะถือเป็นการแก้ไขข้อมูลเดิม`;
+                warningEl.textContent = `⚠️ แจ้งเตือน: บ้านหลังนี้ได้บันทึกข้อมูลของเดือน ${monthNames[month]} พ.ศ. ${year_th} ไปแล้ว (${data.daily_volume} ลิตร) การบันทึกจะถือเป็นการแก้ไขข้อมูลเดิม`;
                 warningEl.classList.remove('hidden');
             } else {
                 warningEl.classList.add('hidden');
@@ -1073,14 +1071,12 @@
                             house_number: r.households?.house_number || '-',
                             village_no: r.households?.village_no !== undefined ? r.households?.village_no : '-',
                             owner_name: r.households?.owner_name || '-',
-                            daily_volume: parseFloat(r.daily_volume) || 0,
                             months_count: 0,
-                            total_volume_liters: 0,
-                            calculated_fee: parseFloat(r.calculated_fee) || 0
+                            total_volume_liters: 0
                         };
                     }
                     summaryMap[hId].months_count += 1;
-                    summaryMap[hId].total_volume_liters += (parseFloat(r.daily_volume) * 30);
+                    summaryMap[hId].total_volume_liters += (parseFloat(r.daily_volume) || 0);
                 }
             });
 
@@ -1106,12 +1102,12 @@
             tbody.innerHTML = '';
 
             let grandTotalVolume = 0;
-            let sumDailyVolume = 0;
+            let totalMonthsSum = 0;
 
             if (data && data.length > 0) {
                 data.forEach(item => {
                     grandTotalVolume += item.total_volume_liters;
-                    sumDailyVolume += item.daily_volume;
+                    totalMonthsSum += item.months_count;
 
                     const vDisplay = String(item.village_no) === '0' ? 'นอกเขต (หมู่ 0)' : `หมู่ที่ ${item.village_no}`;
 
@@ -1120,25 +1116,22 @@
                             <td class="p-3 font-semibold">${item.house_number}</td>
                             <td class="p-3">${vDisplay}</td>
                             <td class="p-3 font-medium">${item.owner_name}</td>
-                            <td class="p-3 text-right font-mono">${item.daily_volume.toLocaleString()} ลิตร</td>
                             <td class="p-3 text-right font-mono">${item.months_count} เดือน</td>
                             <td class="p-3 text-right font-bold text-[#2E5A44] font-mono">${item.total_volume_liters.toLocaleString()} ลิตร</td>
-                            <td class="p-3 text-right text-emerald-700 font-semibold font-mono">${item.calculated_fee.toLocaleString()} บาท</td>
                         </tr>
                     `;
                 });
 
-                const avgDaily = (sumDailyVolume / data.length).toFixed(1);
                 const estimatedWeightKg = (grandTotalVolume * 0.25).toFixed(0);
 
                 document.getElementById('report-stat-total-volume').innerHTML = `${grandTotalVolume.toLocaleString()} <span class="text-base font-normal text-stone-600">ลิตร</span>`;
-                document.getElementById('report-stat-avg-daily').innerHTML = `${avgDaily} <span class="text-base font-normal text-stone-600">ลิตร/วัน</span>`;
+                document.getElementById('report-stat-total-months').innerHTML = `${totalMonthsSum.toLocaleString()} <span class="text-base font-normal text-stone-600">เดือน</span>`;
                 document.getElementById('report-stat-total-weight').innerHTML = `${parseFloat(estimatedWeightKg).toLocaleString()} <span class="text-base font-normal text-stone-600">กก.</span>`;
                 document.getElementById('report-count-badge').textContent = `${data.length} รายการ`;
             } else {
-                tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-stone-500">ไม่พบข้อมูลบันทึกปริมาณขยะตามเงื่อนไขที่เลือก</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-stone-500">ไม่พบข้อมูลบันทึกปริมาณขยะตามเงื่อนไขที่เลือก</td></tr>`;
                 document.getElementById('report-stat-total-volume').innerHTML = `0 <span class="text-base font-normal text-stone-600">ลิตร</span>`;
-                document.getElementById('report-stat-avg-daily').innerHTML = `0 <span class="text-base font-normal text-stone-600">ลิตร/วัน</span>`;
+                document.getElementById('report-stat-total-months').innerHTML = `0 <span class="text-base font-normal text-stone-600">เดือน</span>`;
                 document.getElementById('report-stat-total-weight').innerHTML = `0 <span class="text-base font-normal text-stone-600">กก.</span>`;
                 document.getElementById('report-count-badge').textContent = `0 รายการ`;
             }
@@ -1164,11 +1157,9 @@
                 "บ้านเลขที่": item.house_number,
                 "หมู่บ้าน": String(item.village_no) === '0' ? 'นอกเขต (หมู่ 0)' : `หมู่ที่ ${item.village_no}`,
                 "ชื่อเจ้าบ้าน": item.owner_name,
-                "ปริมาณขยะต่อวัน (ลิตร)": item.daily_volume,
                 "จำนวนเดือนที่บันทึก": item.months_count,
-                "ปริมาณขยะรวมสะสม (ลิตร)": item.total_volume_liters,
-                "ประมาณการน้ำหนัก (กก.)": (item.total_volume_liters * 0.25),
-                "ค่าธรรมเนียมต่อเดือน (บาท)": item.calculated_fee
+                "ปริมาณขยะรวมสะสมช่วงที่เลือก (ลิตร)": item.total_volume_liters,
+                "ประมาณการน้ำหนัก (กก.)": (item.total_volume_liters * 0.25)
             }));
 
             const wb = XLSX.utils.book_new();
@@ -1338,7 +1329,7 @@
                 itemsHtml += `
                     <tr>
                         <td class="border border-stone-400 p-2 text-center">${idx + 1}</td>
-                        <td class="border border-stone-400 p-2">ค่าเก็บและขนมูลฝอย ประจำเดือน${monthNames[r.month]} ${r.year_th} (${r.daily_volume} ลิตร/วัน)</td>
+                        <td class="border border-stone-400 p-2">ค่าเก็บและขนมูลฝอย ประจำเดือน${monthNames[r.month]} ${r.year_th} (${r.daily_volume} ลิตร)</td>
                         <td class="border border-stone-400 p-2 text-center">1</td>
                         <td class="border border-stone-400 p-2 text-right">${parseFloat(r.calculated_fee).toLocaleString('th-TH', {minimumFractionDigits: 2})}</td>
                         <td class="border border-stone-400 p-2 text-right font-bold">${parseFloat(r.calculated_fee).toLocaleString('th-TH', {minimumFractionDigits: 2})}</td>
