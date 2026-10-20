@@ -344,7 +344,7 @@
                         <div class="bg-white p-6 rounded-xl shadow-sm border border-[#EBE3D8]">
                             <p class="text-xs font-semibold text-stone-500 uppercase">ประมาณการน้ำหนักขยะรวม</p>
                             <h3 id="report-stat-total-weight" class="text-3xl font-bold text-amber-600 mt-2">0 <span class="text-base font-normal text-stone-600">กก.</span></h3>
-                            <p class="text-xs text-stone-400 mt-1">โดยประมาณ (1 ลิตร ≈ 0.25 กก.)</p>
+                            <p class="text-xs text-stone-400 mt-1">1 ลิตร = 1 กิโลกรัม</p>
                         </div>
                     </div>
 
@@ -1122,7 +1122,8 @@
                     `;
                 });
 
-                const estimatedWeightKg = (grandTotalVolume * 0.25).toFixed(0);
+                // 1 ลิตร = 1 กิโลกรัม
+                const estimatedWeightKg = grandTotalVolume;
 
                 document.getElementById('report-stat-total-volume').innerHTML = `${grandTotalVolume.toLocaleString()} <span class="text-base font-normal text-stone-600">ลิตร</span>`;
                 document.getElementById('report-stat-total-months').innerHTML = `${totalMonthsSum.toLocaleString()} <span class="text-base font-normal text-stone-600">เดือน</span>`;
@@ -1159,7 +1160,7 @@
                 "ชื่อเจ้าบ้าน": item.owner_name,
                 "จำนวนเดือนที่บันทึก": item.months_count,
                 "ปริมาณขยะรวมสะสมช่วงที่เลือก (ลิตร)": item.total_volume_liters,
-                "ประมาณการน้ำหนัก (กก.)": (item.total_volume_liters * 0.25)
+                "ประมาณการน้ำหนัก (กก.)": item.total_volume_liters
             }));
 
             const wb = XLSX.utils.book_new();
