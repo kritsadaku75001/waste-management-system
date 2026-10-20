@@ -344,7 +344,7 @@
                                         <th class="p-3">หมู่บ้าน</th>
                                         <th class="p-3">ชื่อกิจการ</th>
                                         <th class="p-3 text-right">จำนวนเดือน</th>
-                                        <th class="p-3 text-right">ปริมาณรวม (ลิตร/กก.)</th>
+                                        <th class="p-3 text-right">ปริมาณรวม (ลิตร)</th>
                                     </tr>
                                 </thead>
                                 <tbody id="waste-report-tbody" class="divide-y divide-stone-100"></tbody>
@@ -657,6 +657,7 @@
         let allHouseholds = [];
         let allBusinessHouseholds = [];
         let allInvoiceHistory = [];
+        let rawWasteReportData = [];
 
         async function handleLogin(event) {
             event.preventDefault();
@@ -928,6 +929,103 @@
             document.getElementById('duplicate-warning').classList.add('hidden');
         }
 
+        // --- ส่วนรายงานสรุปปริมาณขยะกิจการ ---
+        async function generateWasteVolumeReport() {
+            const startM = parseInt(document.getElementById('report-start-month').value);
+            const startY = parseInt(document.getElementById('report-start-year').value);
+            const endM = parseInt(document.getElementById('report-end-month').value);
+            const endY = parseInt(document.getElementById('report-end-year').value);
+
+            const startVal = (startY * 12) + startM;
+            const endVal = (endY * 12) + endM;
+
+            if (startVal > endVal) {
+                document.getElementById('waste-report-tbody').innerHTML = `<tr><td colspan="5" class="p-4 text-center text-red-500">ช่วงเดือนเริ่มต้นต้องไม่มากกว่าเดือนสิ้นสุด</td></tr>`;
+                return;
+            }
+
+            const { data: records, error } = await supabaseClient.from('monthly_records').select('*, households(*)');
+            if (error) {
+                console.error(error);
+                return;
+            }
+
+            const summaryMap = {};
+
+            if (records) {
+                records.forEach(r => {
+                    if (r.households && r.households.customer_type === 'business') {
+                        const rVal = (r.year_th * 12) + r.month;
+                        if (rVal >= startVal && rVal <= endVal) {
+                            const hid = r.household_id;
+                            if (!summaryMap[hid]) {
+                                summaryMap[hid] = {
+                                    house_number: r.households.house_number,
+                                    village_no: r.households.village_no,
+                                    owner_name: r.households.owner_name,
+                                    month_count: 0,
+                                    total_volume: 0
+                                };
+                            }
+                            summaryMap[hid].month_count += 1;
+                            summaryMap[hid].total_volume += parseFloat(r.daily_volume || 0);
+                        }
+                    }
+                });
+            }
+
+            rawWasteReportData = Object.values(summaryMap);
+            filterWasteVolumeReportTable();
+        }
+
+        function filterWasteVolumeReportTable() {
+            const villageFilter = document.getElementById('report-filter-village').value;
+            const keyword = document.getElementById('report-filter-keyword').value.toLowerCase();
+
+            const filtered = rawWasteReportData.filter(item => {
+                const matchVillage = (villageFilter === "") || (String(item.village_no) === villageFilter);
+                const matchKeyword = item.owner_name.toLowerCase().includes(keyword) || item.house_number.toLowerCase().includes(keyword);
+                return matchVillage && matchKeyword;
+            });
+
+            document.getElementById('report-count-badge').textContent = `${filtered.length} รายการ`;
+            const tbody = document.getElementById('waste-report-tbody');
+            tbody.innerHTML = '';
+
+            if (filtered.length > 0) {
+                filtered.forEach(item => {
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-stone-50">
+                            <td class="p-3 font-semibold">${item.house_number}</td>
+                            <td class="p-3">หมู่ที่ ${item.village_no}</td>
+                            <td class="p-3">${item.owner_name}</td>
+                            <td class="p-3 text-right font-medium">${item.month_count} เดือน</td>
+                            <td class="p-3 text-right font-bold text-emerald-700">${item.total_volume.toLocaleString()} ลิตร</td>
+                        </tr>
+                    `;
+                });
+            } else {
+                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-stone-500">ไม่พบข้อมูลตามเงื่อนไขที่เลือก</td></tr>`;
+            }
+        }
+
+        function exportWasteReportExcel() {
+            if (rawWasteReportData.length === 0) {
+                alert('ไม่มีข้อมูลสำหรับส่งออก');
+                return;
+            }
+            const wb = XLSX.utils.book_new();
+            const excelRows = rawWasteReportData.map(item => ({
+                "บ้านเลขที่": item.house_number,
+                "หมู่บ้าน": `หมู่ที่ ${item.village_no}`,
+                "ชื่อกิจการ": item.owner_name,
+                "จำนวนเดือนที่บันทึก": item.month_count,
+                "ปริมาณขยะรวม (ลิตร)": item.total_volume
+            }));
+            XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(excelRows), "รายงานปริมาณขยะ");
+            XLSX.writeFile(wb, `waste_volume_report_${new Date().toISOString().slice(0,10)}.xlsx`);
+        }
+
         // --- ส่วนการออกใบแจ้งหนี้แบบกลุ่ม (Batch สำหรับครัวเรือน) ---
         async function generateBatchHouseholdInvoices() {
             const village = document.getElementById('batch-village').value;
@@ -1110,6 +1208,7 @@
             if (confirm('ยกเลิกใบแจ้งหนี้ฉบับนี้?')) {
                 await supabaseClient.from('invoices_history').update({ status: 'cancelled' }).eq('id', id);
                 loadInvoiceHistory();
+                loadDashboard();
             }
         }
 
@@ -1141,7 +1240,7 @@
         }
 
         async function loadPaymentReport() {
-            let query = supabaseClient.from('invoices_history').select('*, households(*)').order('created_at', { ascending: false });
+            let query = supabaseClient.from('invoices_history').select('*, households(*)').neq('status', 'cancelled').order('created_at', { ascending: false });
             if (currentPaymentFilter !== 'all') query = query.eq('status', currentPaymentFilter);
             const { data } = await query;
             const tbody = document.getElementById('payment-status-tbody');
