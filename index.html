@@ -32,7 +32,6 @@
                 <p class="text-sm text-stone-500">กองสาธารณสุขและสิ่งแวดล้อม - ระบบจัดเก็บค่าขยะออนไลน์</p>
             </div>
 
-            <!-- ฟอร์มเข้าสู่ระบบปกติ -->
             <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-stone-700 mb-1">อีเมลเจ้าหน้าที่</label>
@@ -74,7 +73,7 @@
             <aside class="no-print w-full md:w-64 bg-white border-r border-[#EBE3D8] p-4 space-y-2">
                 <button onclick="switchTab('dashboard')" id="nav-dashboard" class="w-full text-left px-4 py-2.5 rounded-lg font-medium bg-[#2E5A44] text-white">📊 แดชบอร์ดภาพรวม</button>
                 <button onclick="switchTab('households')" id="nav-households" class="w-full text-left px-4 py-2.5 rounded-lg font-medium hover:bg-[#FAF8F5] text-[#2E5A44]">🏠 ทะเบียนครัวเรือน</button>
-                <button onclick="switchTab('add-household')" id="nav-add-household" class="w-full text-left px-4 py-2.5 rounded-lg font-medium hover:bg-[#FAF8F5] text-[#2E5A44]">➕ เพิ่มครัวเรือน</button>
+                <button onclick="switchTab('add-household')" id="nav-add-household" class="w-full text-left px-4 py-2.5 rounded-lg font-medium hover:bg-[#FAF8F5] text-[#2E5A44]">➕ เพิ่มครัวเรือน/กิจการ</button>
                 <button onclick="switchTab('monthly-waste')" id="nav-monthly-waste" class="w-full text-left px-4 py-2.5 rounded-lg font-medium hover:bg-[#FAF8F5] text-[#2E5A44]">🗑️ บันทึก/ตรวจขยะประจำเดือน</button>
                 <button onclick="switchTab('waste-report')" id="nav-waste-report" class="w-full text-left px-4 py-2.5 rounded-lg font-medium hover:bg-[#FAF8F5] text-[#2E5A44]">📉 รายงานปริมาณขยะ</button>
                 <button onclick="switchTab('payment-status')" id="nav-payment-status" class="w-full text-left px-4 py-2.5 rounded-lg font-medium hover:bg-[#FAF8F5] text-[#2E5A44]">📈 รายงานและรับชำระเงิน</button>
@@ -89,7 +88,7 @@
                     <h2 class="text-xl font-bold text-[#1B3B2B]">แดชบอร์ดสรุปข้อมูล</h2>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div class="bg-white p-6 rounded-xl shadow-sm border border-[#EBE3D8]">
-                            <p class="text-sm text-stone-500">ครัวเรือนทั้งหมดในระบบ</p>
+                            <p class="text-sm text-stone-500">ครัวเรือน/กิจการทั้งหมดในระบบ</p>
                             <h3 id="stat-total-houses" class="text-3xl font-bold text-[#2E5A44] mt-2">0</h3>
                         </div>
                         <div class="bg-white p-6 rounded-xl shadow-sm border border-[#EBE3D8]">
@@ -106,7 +105,7 @@
                 <!-- ทะเบียนครัวเรือน -->
                 <div id="tab-households" class="hidden space-y-6">
                     <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-                        <h2 class="text-xl font-bold text-[#1B3B2B]">ทะเบียนครัวเรือน</h2>
+                        <h2 class="text-xl font-bold text-[#1B3B2B]">ทะเบียนครัวเรือนและกิจการ</h2>
                         <div class="flex items-center space-x-2 w-full md:w-auto">
                             <input type="text" id="search-household-registry" oninput="filterHouseholdRegistry()" placeholder="🔍 ค้นหาบ้านเลขที่ / ชื่อ / หมู่..." class="px-4 py-2 border rounded-lg text-sm w-full md:w-72">
                             <button onclick="exportHouseholdsExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm whitespace-nowrap shadow-sm">📥 ส่งออก Excel</button>
@@ -119,9 +118,9 @@
                                 <tr class="bg-[#F5F0EB] text-stone-700 text-sm border-b border-[#EBE3D8]">
                                     <th class="p-3">บ้านเลขที่</th>
                                     <th class="p-3">หมู่บ้าน</th>
-                                    <th class="p-3">ชื่อเจ้าบ้าน</th>
-                                    <th class="p-3">เบอร์โทรศัพท์</th>
-                                    <th class="p-3">จำนวนถังขยะ</th>
+                                    <th class="p-3">ชื่อเจ้าบ้าน / กิจการ</th>
+                                    <th class="p-3">ประเภท</th>
+                                    <th class="p-3">ถังขยะ / น้ำหนัก</th>
                                     <th class="p-3 text-center">จัดการ</th>
                                 </tr>
                             </thead>
@@ -134,7 +133,7 @@
                 <div id="tab-add-household" class="hidden space-y-6">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-xl shadow-sm border border-[#EBE3D8]">
                         <div>
-                            <h2 class="text-lg font-bold text-[#1B3B2B]">นำเข้าข้อมูลครัวเรือนผ่านไฟล์ Excel</h2>
+                            <h2 class="text-lg font-bold text-[#1B3B2B]">นำเข้าข้อมูลผ่านไฟล์ Excel</h2>
                             <p class="text-xs text-stone-500 mt-1">ดาวน์โหลดเทมเพลตเพื่อกรอกข้อมูล และอัปโหลดไฟล์เพื่อนำเข้าหลายรายการพร้อมกัน</p>
                         </div>
                         <div class="flex items-center space-x-2 w-full md:w-auto">
@@ -148,7 +147,7 @@
                         </div>
                     </div>
 
-                    <h2 id="form-title" class="text-xl font-bold text-[#1B3B2B] pt-2">เพิ่มข้อมูลครัวเรือนรายเดี่ยว</h2>
+                    <h2 id="form-title" class="text-xl font-bold text-[#1B3B2B] pt-2">เพิ่มข้อมูลครัวเรือน / กิจการรายเดี่ยว</h2>
                     <form onsubmit="handleSaveHousehold(event)" class="bg-white p-6 rounded-xl shadow-sm border border-[#EBE3D8] max-w-2xl space-y-4">
                         <input type="hidden" id="edit-household-id">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -171,22 +170,29 @@
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium mb-1">ชื่อ - สกุล เจ้าบ้าน *</label>
-                            <input type="text" id="owner-name" required placeholder="เช่น นายสมชาย ใจดี" class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-[#2E5A44]">
+                            <label class="block text-sm font-medium mb-1">ชื่อ - สกุล เจ้าบ้าน / ชื่อกิจการ *</label>
+                            <input type="text" id="owner-name" required placeholder="เช่น นายสมชาย ใจดี หรือ ร้านค้า..." class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-[#2E5A44]">
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-medium mb-1">เบอร์โทรศัพท์</label>
-                                <input type="text" id="phone" placeholder="เช่น 081-2345678" class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-[#2E5A44]">
+                                <label class="block text-sm font-medium mb-1">ประเภทการจัดเก็บ *</label>
+                                <select id="customer-type" onchange="toggleCustomerTypeFields()" required class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-[#2E5A44]">
+                                    <option value="household">ครัวเรือน (คิดตามถัง ถังละ 15 บาท)</option>
+                                    <option value="business">กิจการ (คิดตามน้ำหนัก/ลิตร)</option>
+                                </select>
                             </div>
-                            <div>
+                            <div id="field-bin-count">
                                 <label class="block text-sm font-medium mb-1">จำนวนถังขยะ (ใบ) *</label>
-                                <input type="number" id="bin-count" required min="1" value="1" class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-[#2E5A44]">
+                                <input type="number" id="bin-count" min="1" value="1" class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-[#2E5A44]">
                             </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">เบอร์โทรศัพท์</label>
+                            <input type="text" id="phone" placeholder="เช่น 081-2345678" class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-[#2E5A44]">
                         </div>
                         <div class="flex space-x-3 pt-2">
                             <button type="submit" id="submit-btn" class="flex-1 py-3 bg-[#2E5A44] hover:bg-[#1B3B2B] text-white font-medium rounded-lg transition shadow-md">
-                                บันทึกข้อมูลครัวเรือน
+                                บันทึกข้อมูล
                             </button>
                             <button type="button" onclick="resetForm()" class="px-6 py-3 bg-stone-200 hover:bg-stone-300 text-stone-700 font-medium rounded-lg transition">
                                 ล้างฟอร์ม/ยกเลิก
@@ -202,11 +208,12 @@
                     <form onsubmit="handleSaveMonthlyWaste(event)" class="bg-white p-6 rounded-xl shadow-sm border border-[#EBE3D8] max-w-2xl space-y-4">
                         <input type="hidden" id="edit-record-id">
                         <div>
-                            <label class="block text-sm font-medium mb-1">เลือกครัวเรือน *</label>
-                            <input type="text" id="search-waste-household" oninput="filterWasteHouseholdDropdown()" placeholder="🔍 พิมพ์เพื่อค้นหาบ้านเลขที่ / ชื่อเจ้าบ้าน..." class="w-full px-3 py-2 border border-stone-300 rounded-lg text-sm mb-2 focus:ring-2 focus:ring-[#2E5A44]">
-                            <select id="waste-household-id" onchange="checkExistingWasteRecord()" required class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-[#2E5A44]">
+                            <label class="block text-sm font-medium mb-1">เลือกครัวเรือน / กิจการ *</label>
+                            <input type="text" id="search-waste-household" oninput="filterWasteHouseholdDropdown()" placeholder="🔍 พิมพ์เพื่อค้นหาบ้านเลขที่ / ชื่อ..." class="w-full px-3 py-2 border border-stone-300 rounded-lg text-sm mb-2 focus:ring-2 focus:ring-[#2E5A44]">
+                            <select id="waste-household-id" onchange="onSelectWasteHousehold()" required class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-[#2E5A44]">
                                 <option value="">-- เลือกบ้านเลขที่ / เจ้าบ้าน --</option>
                             </select>
+                            <div id="household-type-badge" class="mt-1 text-xs font-bold text-[#2E5A44]"></div>
                             <div id="duplicate-warning" class="text-amber-600 text-xs mt-1.5 font-semibold hidden"></div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -225,8 +232,8 @@
                             </div>
                         </div>
                         <div class="bg-[#FAF8F5] p-4 rounded-lg border border-[#EBE3D8] grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium mb-1">ปริมาณขยะ (ลิตร) *</label>
+                            <div id="input-volume-container">
+                                <label id="volume-label" class="block text-sm font-medium mb-1">ปริมาณขยะ (ลิตร) *</label>
                                 <input type="number" id="waste-volume" required oninput="previewWasteFee()" placeholder="เช่น 200" class="w-full px-4 py-2 bg-white border border-stone-300 rounded-lg focus:ring-2 focus:ring-[#2E5A44]">
                             </div>
                             <div>
@@ -257,9 +264,9 @@
                                 <thead>
                                     <tr class="bg-[#F5F0EB] border-b">
                                         <th class="p-3">บ้านเลขที่</th>
-                                        <th class="p-3">เจ้าบ้าน</th>
+                                        <th class="p-3">เจ้าบ้าน / กิจการ</th>
                                         <th class="p-3">ประจำเดือน/ปี</th>
-                                        <th class="p-3">ปริมาณขยะ (ลิตร)</th>
+                                        <th class="p-3">ปริมาณ / ถัง</th>
                                         <th class="p-3">ค่าบริการ/เดือน</th>
                                         <th class="p-3 text-center">จัดการ</th>
                                     </tr>
@@ -282,7 +289,6 @@
                         </button>
                     </div>
 
-                    <!-- ส่วนตัวกรองช่วงเวลาและเงื่อนไขค้นหา -->
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-[#EBE3D8] space-y-4">
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                             <div>
@@ -324,12 +330,11 @@
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold text-stone-600 mb-1">👤 ค้นหารายบุคคล / บ้านเลขที่</label>
-                                <input type="text" id="report-filter-keyword" oninput="filterWasteVolumeReportTable()" placeholder="🔍 พิมพ์บ้านเลขที่ / ชื่อเจ้าบ้าน..." class="w-full px-3 py-2 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-[#2E5A44]">
+                                <input type="text" id="report-filter-keyword" oninput="filterWasteVolumeReportTable()" placeholder="🔍 พิมพ์บ้านเลขที่ / ชื่อ..." class="w-full px-3 py-2 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-[#2E5A44]">
                             </div>
                         </div>
                     </div>
 
-                    <!-- การ์ดสรุปยอดรวม -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div class="bg-white p-6 rounded-xl shadow-sm border border-[#EBE3D8]">
                             <p class="text-xs font-semibold text-stone-500 uppercase">ปริมาณขยะรวมสะสม</p>
@@ -348,10 +353,9 @@
                         </div>
                     </div>
 
-                    <!-- ตารางแสดงรายงาน -->
                     <div class="bg-white rounded-xl shadow-sm border border-[#EBE3D8] overflow-hidden">
                         <div class="p-4 border-b border-[#EBE3D8] bg-[#F5F0EB] flex justify-between items-center">
-                            <h3 class="font-bold text-[#1B3B2B] text-sm">รายละเอียดปริมาณขยะแยกตามครัวเรือน</h3>
+                            <h3 class="font-bold text-[#1B3B2B] text-sm">รายละเอียดปริมาณขยะแยกตามครัวเรือน/กิจการ</h3>
                             <span id="report-count-badge" class="text-xs bg-[#2E5A44] text-white px-2.5 py-1 rounded-full font-semibold">0 รายการ</span>
                         </div>
                         <div class="overflow-x-auto">
@@ -360,9 +364,9 @@
                                     <tr class="bg-[#FAF8F5] text-stone-700 border-b">
                                         <th class="p-3">บ้านเลขที่</th>
                                         <th class="p-3">หมู่บ้าน</th>
-                                        <th class="p-3">ชื่อเจ้าบ้าน</th>
+                                        <th class="p-3">ชื่อเจ้าบ้าน / กิจการ</th>
                                         <th class="p-3 text-right">จำนวนเดือนที่บันทึก</th>
-                                        <th class="p-3 text-right">ปริมาณขยะรวมสะสมช่วงที่เลือก (ลิตร)</th>
+                                        <th class="p-3 text-right">ปริมาณขยะรวมสะสม (ลิตร)</th>
                                     </tr>
                                 </thead>
                                 <tbody id="waste-report-tbody" class="divide-y divide-stone-100"></tbody>
@@ -377,7 +381,8 @@
                         <h2 class="text-xl font-bold text-[#1B3B2B]">รายงานการจัดเก็บเงินและติดตามการชำระ</h2>
                         <div class="space-x-2">
                             <button onclick="filterPayments('all')" class="px-3 py-1.5 bg-stone-200 rounded text-xs font-semibold">ทั้งหมด</button>
-                            <button onclick="filterPayments('unpaid')" class="px-3 py-1.5 bg-amber-500 text-white rounded text-xs font-semibold">ยังไม่จ่าย</button>
+                            <button onclick="filterPayments('waiting_invoice')" class="px-3 py-1.5 bg-blue-500 text-white rounded text-xs font-semibold">รอสร้างใบแจ้งหนี้</button>
+                            <button onclick="filterPayments('unpaid')" class="px-3 py-1.5 bg-amber-500 text-white rounded text-xs font-semibold">ค้างชำระ</button>
                             <button onclick="filterPayments('paid')" class="px-3 py-1.5 bg-emerald-600 text-white rounded text-xs font-semibold">ชำระแล้ว</button>
                         </div>
                     </div>
@@ -391,7 +396,7 @@
                                     <th class="p-3">จำนวนเงิน</th>
                                     <th class="p-3">สถานะชำระเงิน</th>
                                     <th class="p-3">วันที่ชำระ/เลขที่ใบเสร็จ</th>
-                                    <th class="p-3 text-center">บันทึกรับเงิน</th>
+                                    <th class="p-3 text-center">จัดการ/รับเงิน</th>
                                 </tr>
                             </thead>
                             <tbody id="payment-status-tbody" class="divide-y divide-stone-100"></tbody>
@@ -404,8 +409,8 @@
                     <h2 class="text-xl font-bold text-[#1B3B2B]">ออกใบแจ้งหนี้และพิมพ์เอกสาร A4</h2>
                     <div class="no-print bg-white p-6 rounded-xl shadow-sm border border-[#EBE3D8] max-w-2xl space-y-4">
                         <div>
-                            <label class="block text-sm font-medium mb-1">เลือกครัวเรือน *</label>
-                            <input type="text" id="search-invoice-household" oninput="filterInvoiceHouseholdDropdown()" placeholder="🔍 พิมพ์เพื่อค้นหาบ้านเลขที่ / ชื่อเจ้าบ้าน..." class="w-full px-3 py-2 border border-stone-300 rounded-lg text-sm mb-2 focus:ring-2 focus:ring-[#2E5A44]">
+                            <label class="block text-sm font-medium mb-1">เลือกครัวเรือน / กิจการ *</label>
+                            <input type="text" id="search-invoice-household" oninput="filterInvoiceHouseholdDropdown()" placeholder="🔍 พิมพ์เพื่อค้นหาบ้านเลขที่ / ชื่อ..." class="w-full px-3 py-2 border border-stone-300 rounded-lg text-sm mb-2 focus:ring-2 focus:ring-[#2E5A44]">
                             <select id="invoice-household-id" required class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-[#2E5A44]">
                                 <option value="">-- เลือกบ้านเลขที่ / เจ้าบ้าน --</option>
                             </select>
@@ -436,11 +441,10 @@
                             </div>
                         </div>
                         <button onclick="generateInvoicePreview()" class="w-full py-3 bg-[#2E5A44] hover:bg-[#1B3B2B] text-white font-medium rounded-lg transition shadow-md">
-                            สร้างและแสดงตัวอย่างใบแจ้งหนี้ (ดึงเฉพาะเดือนที่ยังไม่ชำระ)
+                            สร้างและแสดงตัวอย่างใบแจ้งหนี้ (ดึงเฉพาะเดือนที่รอสร้างใบแจ้งหนี้)
                         </button>
                     </div>
 
-                    <!-- ตารางประวัติใบแจ้งหนี้ -->
                     <div class="no-print bg-white rounded-xl shadow-sm border border-[#EBE3D8] p-4 space-y-4">
                         <div class="flex flex-col md:flex-row justify-between items-center gap-4">
                             <h3 class="font-bold text-lg text-[#1B3B2B]">ประวัติใบแจ้งหนี้ที่ออกแล้ว</h3>
@@ -463,9 +467,9 @@
                         </div>
                     </div>
 
-                    <!-- พื้นที่แสดงตัวอย่างก่อนพิมพ์ A4 (ครึ่งบนต้นฉบับ ครึ่งล่างสำเนา) -->
+                    <!-- พื้นที่แสดงตัวอย่างก่อนพิมพ์ A4 -->
                     <div id="printable-invoice-container" class="hidden bg-white p-8 rounded-xl shadow-lg border border-stone-300 max-w-4xl mx-auto space-y-12 print:p-0 print:border-none print:shadow-none">
-                        <!-- ต้นฉบับ (ครึ่งบน) -->
+                        <!-- ต้นฉบับ -->
                         <div class="invoice-section pb-8 border-b-2 border-dashed border-stone-400">
                             <div class="flex justify-between items-start mb-4">
                                 <div class="flex items-center space-x-3">
@@ -491,7 +495,7 @@
                                 <thead>
                                     <tr class="bg-stone-100 text-center">
                                         <th class="border border-stone-400 p-2 w-12">ที่</th>
-                                        <th class="border border-stone-400 p-2 text-left">รายการ (เฉพาะเดือนที่ยังไม่ชำระ)</th>
+                                        <th class="border border-stone-400 p-2 text-left">รายการ</th>
                                         <th class="border border-stone-400 p-2 w-28">จำนวนเดือน</th>
                                         <th class="border border-stone-400 p-2 w-28">อัตรา/เดือน</th>
                                         <th class="border border-stone-400 p-2 w-28">จำนวนเงิน</th>
@@ -515,7 +519,7 @@
                             </div>
                         </div>
 
-                        <!-- สำเนา (ครึ่งล่าง) -->
+                        <!-- สำเนา -->
                         <div class="invoice-section pt-4">
                             <div class="flex justify-between items-start mb-4">
                                 <div class="flex items-center space-x-3">
@@ -541,7 +545,7 @@
                                 <thead>
                                     <tr class="bg-stone-100 text-center">
                                         <th class="border border-stone-400 p-2 w-12">ที่</th>
-                                        <th class="border border-stone-400 p-2 text-left">รายการ (เฉพาะเดือนที่ยังไม่ชำระ)</th>
+                                        <th class="border border-stone-400 p-2 text-left">รายการ</th>
                                         <th class="border border-stone-400 p-2 w-28">จำนวนเดือน</th>
                                         <th class="border border-stone-400 p-2 w-28">อัตรา/เดือน</th>
                                         <th class="border border-stone-400 p-2 w-28">จำนวนเงิน</th>
@@ -565,7 +569,6 @@
                             </div>
                         </div>
 
-                        <!-- ปุ่มสั่งพิมพ์ -->
                         <div class="no-print text-center pt-4">
                             <button onclick="window.print()" class="px-8 py-3 bg-[#2E5A44] hover:bg-[#1B3B2B] text-white font-bold rounded-lg shadow-lg text-lg">
                                 🖨️ พิมพ์ใบแจ้งหนี้ (A4 ต้นฉบับ/สำเนา)
@@ -706,6 +709,20 @@
             if (tabName === 'un-invoiced-report') loadUnInvoicedReport();
         }
 
+        function toggleCustomerTypeFields() {
+            const type = document.getElementById('customer-type').value;
+            const binField = document.getElementById('field-bin-count');
+            if (type === 'household') {
+                binField.style.display = 'block';
+            } else {
+                binField.style.display = 'none';
+            }
+        }
+
+        function getFeeForHousehold(binCount) {
+            return (parseInt(binCount) || 1) * 15;
+        }
+
         function getFeeByLiters(liters) {
             if (liters <= 20) return 15;
             if (liters <= 40) return 40;
@@ -720,9 +737,50 @@
             return 1000 + Math.ceil((liters - 1000) / 1000) * 1000;
         }
 
+        function onSelectWasteHousehold() {
+            const select = document.getElementById('waste-household-id');
+            const selectedId = select.value;
+            const badge = document.getElementById('household-type-badge');
+            const volInput = document.getElementById('waste-volume');
+            const volLabel = document.getElementById('volume-label');
+            const volContainer = document.getElementById('input-volume-container');
+
+            if (!selectedId) {
+                badge.textContent = '';
+                volContainer.style.display = 'block';
+                return;
+            }
+
+            const h = allHouseholds.find(item => item.id === selectedId);
+            if (h) {
+                if (h.customer_type === 'household') {
+                    badge.textContent = `🏷️ ประเภท: ครัวเรือน (${h.bin_count || 1} ถัง) | ค่าบริการ: ${(h.bin_count || 1) * 15} บาท/เดือน`;
+                    volContainer.style.display = 'none';
+                    volInput.value = (h.bin_count || 1) * 15; // ใช้เก็บค่าจำลองเพื่อให้ระบบคำนวณผ่าน
+                } else {
+                    badge.textContent = `🏷️ ประเภท: กิจการ (คิดตามปริมาณลิตร/น้ำหนัก)`;
+                    volContainer.style.display = 'block';
+                    volInput.value = '';
+                }
+            }
+            previewWasteFee();
+            checkExistingWasteRecord();
+        }
+
         function previewWasteFee() {
-            const liters = parseFloat(document.getElementById('waste-volume').value) || 0;
-            const fee = getFeeByLiters(liters);
+            const select = document.getElementById('waste-household-id');
+            const selectedId = select.value;
+            let fee = 0;
+
+            if (selectedId) {
+                const h = allHouseholds.find(item => item.id === selectedId);
+                if (h && h.customer_type === 'household') {
+                    fee = getFeeForHousehold(h.bin_count);
+                } else {
+                    const liters = parseFloat(document.getElementById('waste-volume').value) || 0;
+                    fee = getFeeByLiters(liters);
+                }
+            }
             document.getElementById('waste-fee-preview').textContent = fee.toLocaleString() + ' บาท / เดือน';
         }
 
@@ -732,8 +790,9 @@
             const houseNumber = document.getElementById('house-number').value.trim();
             const villageNo = document.getElementById('village-no').value;
             const ownerName = document.getElementById('owner-name').value.trim();
+            const customerType = document.getElementById('customer-type').value;
+            const binCount = customerType === 'household' ? (parseInt(document.getElementById('bin-count').value) || 1) : 1;
             const phone = document.getElementById('phone').value.trim();
-            const binCount = parseInt(document.getElementById('bin-count').value) || 1;
 
             const { data: existing } = await supabaseClient.from('households')
                 .select('id')
@@ -742,26 +801,26 @@
                 .maybeSingle();
 
             if (existing && existing.id !== id) {
-                alert(`⚠️ ไม่สามารถบันทึกได้ เนื่องจากบ้านเลขที่ "${houseNumber}" ใน "หมู่ที่ ${villageNo}" มีอยู่ในระบบแล้ว (ข้อมูลซ้ำ)`);
+                alert(`⚠️ ไม่สามารถบันทึกได้ เนื่องจากบ้านเลขที่ "${houseNumber}" ใน "หมู่ที่ ${villageNo}" มีอยู่ในระบบแล้ว`);
                 return;
             }
 
             let error;
             if (id) {
                 const res = await supabaseClient.from('households').update({
-                    house_number: houseNumber, village_no: villageNo, owner_name: ownerName, phone: phone, bin_count: binCount
+                    house_number: houseNumber, village_no: villageNo, owner_name: ownerName, customer_type: customerType, bin_count: binCount, phone: phone
                 }).eq('id', id);
                 error = res.error;
             } else {
                 const res = await supabaseClient.from('households').insert([{
-                    house_number: houseNumber, village_no: villageNo, owner_name: ownerName, phone: phone, bin_count: binCount
+                    house_number: houseNumber, village_no: villageNo, owner_name: ownerName, customer_type: customerType, bin_count: binCount, phone: phone
                 }]);
                 error = res.error;
             }
 
             if (error) alert('เกิดข้อผิดพลาด: ' + error.message);
             else {
-                alert(id ? 'อัปเดตข้อมูลสำเร็จ!' : 'บันทึกข้อมูลครัวเรือนสำเร็จ!');
+                alert(id ? 'อัปเดตข้อมูลสำเร็จ!' : 'บันทึกข้อมูลสำเร็จ!');
                 resetForm();
                 switchTab('households');
             }
@@ -770,9 +829,9 @@
         function downloadHouseholdTemplate() {
             const wb = XLSX.utils.book_new();
             const wsData = [
-                ["บ้านเลขที่", "หมู่บ้าน", "ชื่อเจ้าบ้าน", "เบอร์โทรศัพท์", "จำนวนถังขยะ"],
-                ["12/1", "1", "นายสมชาย ใจดี", "0812345678", "1"],
-                ["45/2", "0", "นางสาวสมหญิง นอกเขต", "0898765432", "2"]
+                ["บ้านเลขที่", "หมู่บ้าน", "ชื่อเจ้าบ้าน", "ประเภท(household/business)", "จำนวนถังขยะ", "เบอร์โทรศัพท์"],
+                ["12/1", "1", "นายสมชาย ใจดี", "household", "1", "0812345678"],
+                ["45/2", "0", "ร้านค้ามินิมาร์ท", "business", "1", "0898765432"]
             ];
             const ws = XLSX.utils.aoa_to_sheet(wsData);
             XLSX.utils.book_append_sheet(wb, ws, "Template_Household");
@@ -788,11 +847,10 @@
                 try {
                     const data = new Uint8Array(e.target.result);
                     const workbook = XLSX.read(data, { type: 'array' });
-                    const firstSheetName = workbook.SheetNames[0];
-                    const rows = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheetName]);
+                    const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
 
                     if (!rows || rows.length === 0) {
-                        alert('ไม่พบข้อมูลภายในไฟล์ Excel หรือรูปแบบไม่ถูกต้อง');
+                        alert('ไม่พบข้อมูลภายในไฟล์ Excel');
                         return;
                     }
 
@@ -803,8 +861,9 @@
                         const house_number = String(r["บ้านเลขที่"] || "").trim();
                         const village_no = String(r["หมู่บ้าน"] ?? "").trim();
                         const owner_name = String(r["ชื่อเจ้าบ้าน"] || "").trim();
-                        const phone = String(r["เบอร์โทรศัพท์"] || "").trim();
+                        const customer_type = String(r["ประเภท(household/business)"] || "household").trim();
                         const bin_count = parseInt(r["จำนวนถังขยะ"]) || 1;
+                        const phone = String(r["เบอร์โทรศัพท์"] || "").trim();
 
                         if (!house_number || village_no === "" || !owner_name) continue;
 
@@ -818,17 +877,17 @@
                             duplicateCount++;
                         } else {
                             const { error } = await supabaseClient.from('households').insert([{
-                                house_number, village_no, owner_name, phone, bin_count
+                                house_number, village_no, owner_name, customer_type, bin_count, phone
                             }]);
                             if (!error) successCount++;
                         }
                     }
 
-                    alert(`นำเข้าข้อมูลสำเร็จ ${successCount} รายการ\n(ข้ามรายการที่ซ้ำในระบบ ${duplicateCount} รายการ)`);
+                    alert(`นำเข้าข้อมูลสำเร็จ ${successCount} รายการ\n(ข้ามรายการซ้ำ ${duplicateCount} รายการ)`);
                     event.target.value = '';
                     switchTab('households');
                 } catch (err) {
-                    alert('เกิดข้อผิดพลาดในการอ่านไฟล์ Excel: ' + err.message);
+                    alert('เกิดข้อผิดพลาด: ' + err.message);
                     event.target.value = '';
                 }
             };
@@ -842,40 +901,38 @@
                 document.getElementById('house-number').value = data.house_number;
                 document.getElementById('village-no').value = data.village_no;
                 document.getElementById('owner-name').value = data.owner_name;
-                document.getElementById('phone').value = data.phone || '';
+                document.getElementById('customer-type').value = data.customer_type || 'household';
+                toggleCustomerTypeFields();
                 document.getElementById('bin-count').value = data.bin_count || 1;
-                document.getElementById('form-title').textContent = 'แก้ไขข้อมูลครัวเรือน';
+                document.getElementById('phone').value = data.phone || '';
+                document.getElementById('form-title').textContent = 'แก้ไขข้อมูล';
                 document.getElementById('submit-btn').textContent = 'บันทึกการแก้ไข';
                 switchTab('add-household');
             }
         }
 
         async function deleteHousehold(id) {
-            if (confirm('⚠️ คำเตือน: การลบครัวเรือนนี้จะลบประวัติการบันทึกขยะและใบแจ้งหนี้ที่เกี่ยวข้องทั้งหมดด้วย คุณต้องการลบใช่หรือไม่?')) {
+            if (confirm('⚠️ การลบจะลบประวัติขยะและใบแจ้งหนี้ที่เกี่ยวข้องด้วย ยืนยันการลบ?')) {
                 await supabaseClient.from('monthly_records').delete().eq('household_id', id);
                 await supabaseClient.from('invoices_history').delete().eq('household_id', id);
                 const { error } = await supabaseClient.from('households').delete().eq('id', id);
 
-                if (error) {
-                    alert('ลบข้อมูลไม่สำเร็จ: ' + error.message);
-                } else {
-                    alert('ลบข้อมูลครัวเรือนและประวัติที่เกี่ยวข้องเรียบร้อยแล้ว');
-                    loadHouseholds();
-                }
+                if (error) alert('ลบไม่สำเร็จ: ' + error.message);
+                else { alert('ลบเรียบร้อยแล้ว'); loadHouseholds(); }
             }
         }
 
         function resetForm() {
             document.getElementById('edit-household-id').value = '';
-            document.getElementById('form-title').textContent = 'เพิ่มข้อมูลครัวเรือนรายเดี่ยว';
-            document.getElementById('submit-btn').textContent = 'บันทึกข้อมูลครัวเรือน';
+            document.getElementById('form-title').textContent = 'เพิ่มข้อมูลครัวเรือน / กิจการรายเดี่ยว';
+            document.getElementById('submit-btn').textContent = 'บันทึกข้อมูล';
             document.querySelector('#tab-add-household form').reset();
+            toggleCustomerTypeFields();
         }
 
         async function populateHouseholdDropdowns() {
-            const { data } = await supabaseClient.from('households').select('id, house_number, village_no, owner_name').order('village_no');
+            const { data } = await supabaseClient.from('households').select('*').order('village_no');
             allHouseholds = data || [];
-            
             renderHouseholdDropdown('waste-household-id', allHouseholds);
             renderHouseholdDropdown('invoice-household-id', allHouseholds);
         }
@@ -886,7 +943,8 @@
             if (households) {
                 households.forEach(h => {
                     const vText = String(h.village_no) === '0' ? 'นอกเขต (หมู่ 0)' : `หมู่ ${h.village_no}`;
-                    options += `<option value="${h.id}">บ้านเลขที่ ${h.house_number} ${vText} (${h.owner_name})</option>`;
+                    const typeText = h.customer_type === 'business' ? '[กิจการ]' : '[ครัวเรือน]';
+                    options += `<option value="${h.id}">บ้านเลขที่ ${h.house_number} ${vText} (${h.owner_name}) ${typeText}</option>`;
                 });
             }
             selectEl.innerHTML = options;
@@ -894,24 +952,13 @@
 
         function filterWasteHouseholdDropdown() {
             const keyword = document.getElementById('search-waste-household').value.toLowerCase();
-            const filtered = allHouseholds.filter(h => {
-                const house = h.house_number?.toLowerCase() || '';
-                const owner = h.owner_name?.toLowerCase() || '';
-                const village = h.village_no?.toString() || '';
-                return house.includes(keyword) || owner.includes(keyword) || village.includes(keyword);
-            });
+            const filtered = allHouseholds.filter(h => h.house_number?.toLowerCase().includes(keyword) || h.owner_name?.toLowerCase().includes(keyword));
             renderHouseholdDropdown('waste-household-id', filtered);
-            checkExistingWasteRecord();
         }
 
         function filterInvoiceHouseholdDropdown() {
             const keyword = document.getElementById('search-invoice-household').value.toLowerCase();
-            const filtered = allHouseholds.filter(h => {
-                const house = h.house_number?.toLowerCase() || '';
-                const owner = h.owner_name?.toLowerCase() || '';
-                const village = h.village_no?.toString() || '';
-                return house.includes(keyword) || owner.includes(keyword) || village.includes(keyword);
-            });
+            const filtered = allHouseholds.filter(h => h.house_number?.toLowerCase().includes(keyword) || h.owner_name?.toLowerCase().includes(keyword));
             renderHouseholdDropdown('invoice-household-id', filtered);
         }
 
@@ -922,10 +969,7 @@
             const warningEl = document.getElementById('duplicate-warning');
             const editId = document.getElementById('edit-record-id').value;
 
-            if (!household_id || !month || !year_th) {
-                warningEl.classList.add('hidden');
-                return;
-            }
+            if (!household_id || !month || !year_th) { warningEl.classList.add('hidden'); return; }
 
             const { data } = await supabaseClient.from('monthly_records')
                 .select('id, daily_volume')
@@ -935,7 +979,7 @@
                 .maybeSingle();
 
             if (data && data.id !== editId) {
-                warningEl.textContent = `⚠️ แจ้งเตือน: บ้านหลังนี้ได้บันทึกข้อมูลของเดือน ${monthNames[month]} พ.ศ. ${year_th} ไปแล้ว (${data.daily_volume} ลิตร) การบันทึกจะถือเป็นการแก้ไขข้อมูลเดิม`;
+                warningEl.textContent = `⚠️ แจ้งเตือน: บ้านหลังนี้ได้บันทึกข้อมูลเดือน ${monthNames[month]} พ.ศ. ${year_th} ไปแล้ว การบันทึกจะถือเป็นการแก้ไข`;
                 warningEl.classList.remove('hidden');
             } else {
                 warningEl.classList.add('hidden');
@@ -948,8 +992,20 @@
             const household_id = document.getElementById('waste-household-id').value;
             const month = parseInt(document.getElementById('waste-month').value);
             const year_th = parseInt(document.getElementById('waste-year').value);
-            const daily_volume = parseFloat(document.getElementById('waste-volume').value) || 0;
-            const calculated_fee = getFeeByLiters(daily_volume);
+
+            const h = allHouseholds.find(item => item.id === household_id);
+            if (!h) return alert('กรุณาเลือกครัวเรือน/กิจการ');
+
+            let daily_volume = 0;
+            let calculated_fee = 0;
+
+            if (h.customer_type === 'household') {
+                daily_volume = (h.bin_count || 1) * 15; // บันทึกสะสมเทียบเท่าลิตรตามถัง หรือใช้คำนวณ
+                calculated_fee = getFeeForHousehold(h.bin_count);
+            } else {
+                daily_volume = parseFloat(document.getElementById('waste-volume').value) || 0;
+                calculated_fee = getFeeByLiters(daily_volume);
+            }
 
             let error;
             if (record_id) {
@@ -959,14 +1015,14 @@
                 error = res.error;
             } else {
                 const res = await supabaseClient.from('monthly_records').upsert([{
-                    household_id, month, year_th, daily_volume, calculated_fee, status: 'unpaid'
+                    household_id, month, year_th, daily_volume, calculated_fee, status: 'waiting_invoice'
                 }], { onConflict: 'household_id,month,year_th' });
                 error = res.error;
             }
 
-            if (error) alert('เกิดข้อผิดพลาดในการบันทึก: ' + error.message);
+            if (error) alert('เกิดข้อผิดพลาด: ' + error.message);
             else {
-                alert(`บันทึก/แก้ไขข้อมูลขยะประจำเดือน ${monthNames[month]} พ.ศ. ${year_th} สำเร็จแล้ว`);
+                alert(`บันทึกข้อมูลประจำเดือน ${monthNames[month]} พ.ศ. ${year_th} สำเร็จแล้ว`);
                 resetWasteForm();
                 loadMonthlyWasteRecords();
             }
@@ -974,7 +1030,7 @@
 
         async function loadMonthlyWasteRecords() {
             const { data } = await supabaseClient.from('monthly_records')
-                .select('*, households(house_number, village_no, owner_name)')
+                .select('*, households(house_number, village_no, owner_name, customer_type, bin_count)')
                 .order('created_at', { ascending: false });
 
             allWasteRecords = data || [];
@@ -987,12 +1043,13 @@
             if (data && data.length > 0) {
                 data.forEach(r => {
                     const vText = String(r.households?.village_no) === '0' ? 'นอกเขต' : `ม.${r.households?.village_no}`;
+                    const descText = r.households?.customer_type === 'household' ? `ครัวเรือน (${r.households?.bin_count || 1} ถัง)` : `${r.daily_volume} ลิตร`;
                     tbody.innerHTML += `
                         <tr class="hover:bg-stone-50">
                             <td class="p-3 font-semibold">${r.households?.house_number} (${vText})</td>
                             <td class="p-3">${r.households?.owner_name}</td>
                             <td class="p-3">${monthNames[r.month]} ${r.year_th}</td>
-                            <td class="p-3">${r.daily_volume} ลิตร</td>
+                            <td class="p-3">${descText}</td>
                             <td class="p-3 text-emerald-700 font-bold">${r.calculated_fee} ฿</td>
                             <td class="p-3 text-center space-x-1">
                                 <button onclick="editWasteRecord('${r.id}', '${r.household_id}', ${r.month}, ${r.year_th}, ${r.daily_volume})" class="bg-amber-500 text-white px-2 py-1 rounded text-xs">แก้ไข</button>
@@ -1008,12 +1065,7 @@
 
         function filterWasteRecords() {
             const keyword = document.getElementById('search-waste-input').value.toLowerCase();
-            const filtered = allWasteRecords.filter(r => {
-                const house = r.households?.house_number?.toLowerCase() || '';
-                const owner = r.households?.owner_name?.toLowerCase() || '';
-                const village = r.households?.village_no?.toString() || '';
-                return house.includes(keyword) || owner.includes(keyword) || village.includes(keyword);
-            });
+            const filtered = allWasteRecords.filter(r => r.households?.house_number?.toLowerCase().includes(keyword) || r.households?.owner_name?.toLowerCase().includes(keyword));
             renderWasteTable(filtered);
         }
 
@@ -1022,26 +1074,27 @@
             document.getElementById('waste-household-id').value = householdId;
             document.getElementById('waste-month').value = month;
             document.getElementById('waste-year').value = year;
+            onSelectWasteHousehold();
             document.getElementById('waste-volume').value = volume;
             previewWasteFee();
-            checkExistingWasteRecord();
             document.getElementById('waste-submit-btn').textContent = 'บันทึกการแก้ไขขยะ';
         }
 
         async function deleteWasteRecord(id) {
-            if (confirm('คุณต้องการลบการบันทึกขยะนี้ใช่หรือไม่?')) {
+            if (confirm('คุณต้องการลบการบันทึกนี้ใช่หรือไม่?')) {
                 const { error } = await supabaseClient.from('monthly_records').delete().eq('id', id);
-                if (!error) { alert('ลบข้อมูลเรียบร้อย'); loadMonthlyWasteRecords(); }
+                if (!error) { alert('ลบเรียบร้อย'); loadMonthlyWasteRecords(); }
             }
         }
 
         function resetWasteForm() {
             document.getElementById('edit-record-id').value = '';
             document.getElementById('waste-volume').value = '';
+            document.getElementById('household-type-badge').textContent = '';
             document.getElementById('duplicate-warning').classList.add('hidden');
             document.getElementById('waste-submit-btn').textContent = 'บันทึกปริมาณขยะ';
+            document.getElementById('input-volume-container').style.display = 'block';
             previewWasteFee();
-            checkExistingWasteRecord();
         }
 
         async function generateWasteVolumeReport() {
@@ -1059,7 +1112,6 @@
 
             const startVal = (startY * 12) + startM;
             const endVal = (endY * 12) + endM;
-
             const summaryMap = {};
 
             data.forEach(r => {
@@ -1100,7 +1152,6 @@
         function renderWasteVolumeReportTable(data) {
             const tbody = document.getElementById('waste-report-tbody');
             tbody.innerHTML = '';
-
             let grandTotalVolume = 0;
             let totalMonthsSum = 0;
 
@@ -1108,7 +1159,6 @@
                 data.forEach(item => {
                     grandTotalVolume += item.total_volume_liters;
                     totalMonthsSum += item.months_count;
-
                     const vDisplay = String(item.village_no) === '0' ? 'นอกเขต (หมู่ 0)' : `หมู่ที่ ${item.village_no}`;
 
                     tbody.innerHTML += `
@@ -1122,45 +1172,29 @@
                     `;
                 });
 
-                // 1 ลิตร = 1 กิโลกรัม
-                const estimatedWeightKg = grandTotalVolume;
-
                 document.getElementById('report-stat-total-volume').innerHTML = `${grandTotalVolume.toLocaleString()} <span class="text-base font-normal text-stone-600">ลิตร</span>`;
                 document.getElementById('report-stat-total-months').innerHTML = `${totalMonthsSum.toLocaleString()} <span class="text-base font-normal text-stone-600">เดือน</span>`;
-                document.getElementById('report-stat-total-weight').innerHTML = `${parseFloat(estimatedWeightKg).toLocaleString()} <span class="text-base font-normal text-stone-600">กก.</span>`;
+                document.getElementById('report-stat-total-weight').innerHTML = `${grandTotalVolume.toLocaleString()} <span class="text-base font-normal text-stone-600">กก.</span>`;
                 document.getElementById('report-count-badge').textContent = `${data.length} รายการ`;
             } else {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-stone-500">ไม่พบข้อมูลบันทึกปริมาณขยะตามเงื่อนไขที่เลือก</td></tr>`;
-                document.getElementById('report-stat-total-volume').innerHTML = `0 <span class="text-base font-normal text-stone-600">ลิตร</span>`;
-                document.getElementById('report-stat-total-months').innerHTML = `0 <span class="text-base font-normal text-stone-600">เดือน</span>`;
-                document.getElementById('report-stat-total-weight').innerHTML = `0 <span class="text-base font-normal text-stone-600">กก.</span>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-stone-500">ไม่พบข้อมูลตามเงื่อนไขที่เลือก</td></tr>`;
+                document.getElementById('report-stat-total-volume').innerHTML = `0 ลิตร`;
+                document.getElementById('report-stat-total-months').innerHTML = `0 เดือน`;
+                document.getElementById('report-stat-total-weight').innerHTML = `0 กก.`;
                 document.getElementById('report-count-badge').textContent = `0 รายการ`;
             }
         }
 
         function exportWasteReportExcel() {
-            const selectedVillage = document.getElementById('report-filter-village').value;
-            const keyword = document.getElementById('report-filter-keyword').value.toLowerCase().trim();
-
-            const filtered = rawReportData.filter(item => {
-                const matchVillage = selectedVillage !== "" ? item.village_no.toString() === selectedVillage : true;
-                const matchKeyword = keyword ? (item.house_number.toLowerCase().includes(keyword) || item.owner_name.toLowerCase().includes(keyword)) : true;
-                return matchVillage && matchKeyword;
-            });
-
-            if (!filtered || filtered.length === 0) {
-                alert('ไม่มีข้อมูลสำหรับส่งออก');
-                return;
-            }
-
-            const exportData = filtered.map((item, index) => ({
+            if (!rawReportData || rawReportData.length === 0) return alert('ไม่มีข้อมูลสำหรับส่งออก');
+            const exportData = rawReportData.map((item, index) => ({
                 "ลำดับ": index + 1,
                 "บ้านเลขที่": item.house_number,
                 "หมู่บ้าน": String(item.village_no) === '0' ? 'นอกเขต (หมู่ 0)' : `หมู่ที่ ${item.village_no}`,
-                "ชื่อเจ้าบ้าน": item.owner_name,
+                "ชื่อเจ้าบ้าน / กิจการ": item.owner_name,
                 "จำนวนเดือนที่บันทึก": item.months_count,
-                "ปริมาณขยะรวมสะสมช่วงที่เลือก (ลิตร)": item.total_volume_liters,
-                "ประมาณการน้ำหนัก (กก.)": item.total_volume_liters
+                "ปริมาณขยะรวม (ลิตร)": item.total_volume_liters,
+                "น้ำหนัก (กก.)": item.total_volume_liters
             }));
 
             const wb = XLSX.utils.book_new();
@@ -1185,18 +1219,23 @@
 
             if (data && data.length > 0) {
                 data.forEach(r => {
-                    const isPaid = r.status === 'paid';
-                    const statusBadge = isPaid 
-                        ? `<span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-bold">ชำระแล้ว</span>`
-                        : `<span class="px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-bold">ค้างชำระ</span>`;
+                    let statusBadge = '';
+                    let actionBtn = '';
 
-                    const payDetail = isPaid 
+                    if (r.status === 'waiting_invoice') {
+                        statusBadge = `<span class="px-2.5 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-bold">รอสร้างใบแจ้งหนี้</span>`;
+                        actionBtn = `<button onclick="gotoInvoiceForHouse('${r.household_id}')" class="bg-blue-600 text-white px-3 py-1.5 rounded text-xs font-bold">ไปสร้างใบแจ้งหนี้</button>`;
+                    } else if (r.status === 'unpaid') {
+                        statusBadge = `<span class="px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-bold">ค้างชำระ</span>`;
+                        actionBtn = `<button onclick="openPaymentModal('${r.id}', '${r.households?.house_number}', '${monthNames[r.month]} ${r.year_th}', ${r.calculated_fee})" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded text-xs font-bold">รับชำระเงิน</button>`;
+                    } else if (r.status === 'paid') {
+                        statusBadge = `<span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-bold">ชำระแล้ว</span>`;
+                        actionBtn = `<button onclick="cancelPayment('${r.id}')" class="text-xs text-red-600 underline">ยกเลิกการรับเงิน</button>`;
+                    }
+
+                    const payDetail = r.status === 'paid' 
                         ? `${new Date(r.paid_at).toLocaleDateString('th-TH')} (${r.payment_method || 'เงินสด'})<br><span class="text-xs text-stone-500">เลขที่: ${r.receipt_no || '-'}</span>`
                         : `-`;
-
-                    const actionBtn = isPaid
-                        ? `<button onclick="cancelPayment('${r.id}')" class="text-xs text-red-600 underline">ยกเลิกการรับเงิน</button>`
-                        : `<button onclick="openPaymentModal('${r.id}', '${r.households?.house_number}', '${monthNames[r.month]} ${r.year_th}', ${r.calculated_fee})" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded text-xs font-bold">รับชำระเงิน</button>`;
 
                     const vText = String(r.households?.village_no) === '0' ? 'นอกเขต' : `หมู่ ${r.households?.village_no}`;
 
@@ -1212,7 +1251,7 @@
                     `;
                 });
             } else {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-stone-500">ไม่พบรายการจัดเก็บเงิน</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-stone-500">ไม่พบรายการจัดเก็บเงินตามเงื่อนไข</td></tr>`;
             }
         }
 
@@ -1256,12 +1295,12 @@
         }
 
         async function cancelPayment(id) {
-            if (confirm('คุณต้องการยกเลิกการรับเงินรายการนี้ใช่หรือไม่?')) {
+            if (confirm('ต้องการยกเลิกการรับเงินรายการนี้ใช่หรือไม่?')) {
                 const { error } = await supabaseClient.from('monthly_records').update({
                     status: 'unpaid', paid_at: null, payment_method: null, receipt_no: null
                 }).eq('id', id);
 
-                if (!error) { alert('ยกเลิกรายการรับเงินเรียบร้อยแล้ว'); loadPaymentReport(); loadDashboard(); }
+                if (!error) { alert('ยกเลิกเรียบร้อย'); loadPaymentReport(); loadDashboard(); }
             }
         }
 
@@ -1272,10 +1311,10 @@
             const endM = parseInt(document.getElementById('invoice-end-month').value);
             const endY = parseInt(document.getElementById('invoice-end-year').value);
 
-            if (!household_id) return alert('กรุณาเลือกครัวเรือน');
+            if (!household_id) return alert('กรุณาเลือกครัวเรือน/กิจการ');
 
             const { data: hData } = await supabaseClient.from('households').select('*').eq('id', household_id).single();
-            if (!hData) return alert('ไม่พบข้อมูลครัวเรือน');
+            if (!hData) return alert('ไม่พบข้อมูล');
 
             const { data: rData } = await supabaseClient.from('monthly_records')
                 .select('*')
@@ -1283,7 +1322,7 @@
                 .order('year_th', { ascending: true })
                 .order('month', { ascending: true });
 
-            let unpaidRecords = [];
+            let targetRecords = [];
             let totalAmount = 0;
 
             if (rData) {
@@ -1292,45 +1331,43 @@
                     const startDateVal = (startY * 12) + startM;
                     const endDateVal = (endY * 12) + endM;
 
-                    if (rDateVal >= startDateVal && rDateVal <= endDateVal && r.status === 'unpaid') {
-                        unpaidRecords.push(r);
+                    if (rDateVal >= startDateVal && rDateVal <= endDateVal && r.status === 'waiting_invoice') {
+                        targetRecords.push(r);
                         totalAmount += parseFloat(r.calculated_fee);
                     }
                 });
             }
 
-            if (unpaidRecords.length === 0) {
-                alert('ไม่พบรายการที่ยังไม่ชำระเงินในช่วงเดือนที่เลือก (ครัวเรือนนี้อาจชำระครบหมดแล้ว หรือยังไม่ได้บันทึกข้อมูลขยะในช่วงเวลานั้น)');
+            if (targetRecords.length === 0) {
+                alert('ไม่พบรายการที่อยู่ในสถานะ "รอสร้างใบแจ้งหนี้" ช่วงเวลาที่เลือก');
                 return;
             }
 
             const invoiceNo = 'INV-' + Date.now().toString().slice(-8);
 
+            // บันทึกประวัติใบแจ้งหนี้
             await supabaseClient.from('invoices_history').insert([{
-                household_id,
-                invoice_no: invoiceNo,
-                start_month: startM,
-                start_year: startY,
-                end_month: endM,
-                end_year: endY,
-                total_months: unpaidRecords.length,
-                total_amount: totalAmount,
-                status: 'active'
+                household_id, invoice_no: invoiceNo, start_month: startM, start_year: startY, end_month: endM, end_year: endY,
+                total_months: targetRecords.length, total_amount: totalAmount, status: 'active'
             }]);
 
-            renderInvoiceView(hData, invoiceNo, unpaidRecords, totalAmount);
+            // เปลี่ยนสถานะขยะจาก waiting_invoice เป็น unpaid (ค้างชำระ)
+            for (let rec of targetRecords) {
+                await supabaseClient.from('monthly_records').update({ status: 'unpaid' }).eq('id', rec.id);
+            }
+
+            renderInvoiceView(hData, invoiceNo, targetRecords, totalAmount);
             loadInvoiceHistory();
         }
 
-        function renderInvoiceView(hData, invoiceNo, unpaidRecords, totalAmount) {
+        function renderInvoiceView(hData, invoiceNo, records, totalAmount) {
             const currentDateStr = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
-
             let itemsHtml = '';
-            unpaidRecords.forEach((r, idx) => {
+            records.forEach((r, idx) => {
                 itemsHtml += `
                     <tr>
                         <td class="border border-stone-400 p-2 text-center">${idx + 1}</td>
-                        <td class="border border-stone-400 p-2">ค่าเก็บและขนมูลฝอย ประจำเดือน${monthNames[r.month]} ${r.year_th} (${r.daily_volume} ลิตร)</td>
+                        <td class="border border-stone-400 p-2">ค่าเก็บและขนมูลฝอย ประจำเดือน${monthNames[r.month]} ${r.year_th}</td>
                         <td class="border border-stone-400 p-2 text-center">1</td>
                         <td class="border border-stone-400 p-2 text-right">${parseFloat(r.calculated_fee).toLocaleString('th-TH', {minimumFractionDigits: 2})}</td>
                         <td class="border border-stone-400 p-2 text-right font-bold">${parseFloat(r.calculated_fee).toLocaleString('th-TH', {minimumFractionDigits: 2})}</td>
@@ -1338,15 +1375,14 @@
                 `;
             });
 
-            const vTextInvoice = String(hData.village_no) === '0' ? 'นอกเขต (หมู่ 0)' : `หมู่ที่ ${hData.village_no}`;
+            const vText = String(hData.village_no) === '0' ? 'นอกเขต (หมู่ 0)' : `หมู่ที่ ${hData.village_no}`;
 
             ['1', '2'].forEach(suffix => {
                 document.getElementById('print-date-' + suffix).textContent = currentDateStr;
                 document.getElementById('inv-no-badge-' + suffix).textContent = invoiceNo;
                 document.getElementById('inv-owner-' + suffix).textContent = hData.owner_name;
                 document.getElementById('inv-house-' + suffix).textContent = hData.house_number;
-                document.getElementById('inv-village-' + suffix).textContent = vTextInvoice;
-                
+                document.getElementById('inv-village-' + suffix).textContent = vText;
                 document.getElementById('inv-items-tbody-' + suffix).innerHTML = itemsHtml;
                 document.getElementById('inv-total-text-' + suffix).textContent = totalAmount.toLocaleString('th-TH', {minimumFractionDigits: 2}) + ' บาท';
             });
@@ -1367,19 +1403,11 @@
         function renderInvoiceTable(data) {
             const tbody = document.getElementById('invoice-history-tbody');
             tbody.innerHTML = '';
-
             if (data && data.length > 0) {
                 data.forEach(inv => {
                     const isCancelled = inv.status === 'cancelled';
-                    const statusBadge = isCancelled 
-                        ? `<span class="px-2 py-0.5 bg-red-100 text-red-700 rounded text-xs font-bold">ยกเลิกแล้ว</span>`
-                        : `<span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded text-xs font-bold">ใช้งานปกติ</span>`;
-
-                    const actionBtns = isCancelled
-                        ? `<span class="text-xs text-stone-400">ยกเลิกแล้ว</span>`
-                        : `<button onclick="printExistingInvoice('${inv.id}')" class="bg-blue-600 text-white px-2.5 py-1 rounded text-xs">พิมพ์ซ้ำ</button>
-                           <button onclick="cancelInvoice('${inv.id}')" class="bg-red-500 text-white px-2.5 py-1 rounded text-xs">ยกเลิกใบแจ้งหนี้</button>`;
-
+                    const statusBadge = isCancelled ? `<span class="px-2 py-0.5 bg-red-100 text-red-700 rounded text-xs font-bold">ยกเลิกแล้ว</span>` : `<span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded text-xs font-bold">ใช้งานปกติ</span>`;
+                    const actionBtns = isCancelled ? `-` : `<button onclick="printExistingInvoice('${inv.id}')" class="bg-blue-600 text-white px-2.5 py-1 rounded text-xs">พิมพ์ซ้ำ</button>`;
                     const vText = String(inv.households?.village_no) === '0' ? 'นอกเขต' : `หมู่ ${inv.households?.village_no}`;
 
                     tbody.innerHTML += `
@@ -1394,79 +1422,45 @@
                     `;
                 });
             } else {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-stone-500">ไม่พบประวัติการออกใบแจ้งหนี้</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-stone-500">ไม่พบประวัติใบแจ้งหนี้</td></tr>`;
             }
         }
 
         function filterInvoiceHistory() {
             const keyword = document.getElementById('search-invoice-input').value.toLowerCase();
-            const filtered = allInvoiceHistory.filter(inv => {
-                const invNo = inv.invoice_no?.toLowerCase() || '';
-                const house = inv.households?.house_number?.toLowerCase() || '';
-                const owner = inv.households?.owner_name?.toLowerCase() || '';
-                return invNo.includes(keyword) || house.includes(keyword) || owner.includes(keyword);
-            });
+            const filtered = allInvoiceHistory.filter(inv => inv.invoice_no?.toLowerCase().includes(keyword) || inv.households?.house_number?.toLowerCase().includes(keyword));
             renderInvoiceTable(filtered);
         }
 
         async function printExistingInvoice(invId) {
-            const { data: inv } = await supabaseClient.from('invoices_history')
-                .select('*, households(*)')
-                .eq('id', invId)
-                .single();
-
+            const { data: inv } = await supabaseClient.from('invoices_history').select('*, households(*)').eq('id', invId).single();
             if (inv) {
-                const { data: rData } = await supabaseClient.from('monthly_records')
-                    .select('*')
-                    .eq('household_id', inv.household_id)
-                    .order('year_th', { ascending: true })
-                    .order('month', { ascending: true });
-
-                let unpaidRecords = [];
+                const { data: rData } = await supabaseClient.from('monthly_records').select('*').eq('household_id', inv.household_id);
+                let records = [];
                 if (rData) {
                     rData.forEach(r => {
-                        const rDateVal = (r.year_th * 12) + r.month;
-                        const startDateVal = (inv.start_year * 12) + inv.start_month;
-                        const endDateVal = (inv.end_year * 12) + inv.end_month;
-                        if (rDateVal >= startDateVal && rDateVal <= endDateVal && r.status === 'unpaid') {
-                            unpaidRecords.push(r);
+                        const rVal = (r.year_th * 12) + r.month;
+                        if (rVal >= (inv.start_year*12)+inv.start_month && rVal <= (inv.end_year*12)+inv.end_month) {
+                            records.push(r);
                         }
                     });
                 }
-                renderInvoiceView(inv.households, inv.invoice_no, unpaidRecords, inv.total_amount);
-            }
-        }
-
-        async function cancelInvoice(invId) {
-            if (confirm('คุณต้องการยกเลิกใบแจ้งหนี้ฉบับนี้ใช่หรือไม่?')) {
-                const { error } = await supabaseClient.from('invoices_history')
-                    .update({ status: 'cancelled' })
-                    .eq('id', invId);
-
-                if (!error) {
-                    alert('ยกเลิกใบแจ้งหนี้เรียบร้อยแล้ว');
-                    loadInvoiceHistory();
-                } else {
-                    alert('เกิดข้อผิดพลาด: ' + error.message);
-                }
+                renderInvoiceView(inv.households, inv.invoice_no, records, inv.total_amount);
             }
         }
 
         async function loadUnInvoicedReport() {
             const { data: households } = await supabaseClient.from('households').select('*').order('village_no');
-            const { data: wasteRecords } = await supabaseClient.from('monthly_records').select('household_id');
-            const { data: invoices } = await supabaseClient.from('invoices_history').select('household_id').eq('status', 'active');
+            const { data: wasteRecords } = await supabaseClient.from('monthly_records').select('*').eq('status', 'waiting_invoice');
 
-            const recordedHouseholdIds = new Set(wasteRecords ? wasteRecords.map(w => w.household_id) : []);
-            const invoicedIds = new Set(invoices ? invoices.map(i => i.household_id) : []);
-
+            const waitingIds = new Set(wasteRecords ? wasteRecords.map(w => w.household_id) : []);
             const tbody = document.getElementById('un-invoiced-tbody');
             tbody.innerHTML = '';
 
-            let unInvoicedList = households ? households.filter(h => recordedHouseholdIds.has(h.id) && !invoicedIds.has(h.id)) : [];
+            let list = households ? households.filter(h => waitingIds.has(h.id)) : [];
 
-            if (unInvoicedList.length > 0) {
-                unInvoicedList.forEach(h => {
+            if (list.length > 0) {
+                list.forEach(h => {
                     const vText = String(h.village_no) === '0' ? 'นอกเขต (หมู่ 0)' : `หมู่ที่ ${h.village_no}`;
                     tbody.innerHTML += `
                         <tr class="hover:bg-stone-50">
@@ -1474,7 +1468,7 @@
                             <td class="p-3">${vText}</td>
                             <td class="p-3">${h.owner_name}</td>
                             <td class="p-3">${h.phone || '-'}</td>
-                            <td class="p-3 text-center"><span class="px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-bold">บันทึกขยะแล้ว / ยังไม่ออกใบแจ้งหนี้</span></td>
+                            <td class="p-3 text-center"><span class="px-2.5 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-bold">รอสร้างใบแจ้งหนี้</span></td>
                             <td class="p-3 text-center">
                                 <button onclick="gotoInvoiceForHouse('${h.id}')" class="bg-[#2E5A44] text-white px-3 py-1 rounded text-xs">ไปออกใบแจ้งหนี้</button>
                             </td>
@@ -1482,7 +1476,7 @@
                     `;
                 });
             } else {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-emerald-600 font-bold">ยอดเยี่ยม! ไม่มีครัวเรือนที่บันทึกขยะแล้วค้างออกใบแจ้งหนี้</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-emerald-600 font-bold">ยอดเยี่ยม! ไม่มีรายการที่รอสร้างใบแจ้งหนี้</td></tr>`;
             }
         }
 
@@ -1494,7 +1488,6 @@
         async function loadDashboard() {
             const { count: hCount } = await supabaseClient.from('households').select('*', { count: 'exact', head: true });
             const { count: rCount } = await supabaseClient.from('monthly_records').select('*', { count: 'exact', head: true });
-            
             const { data: unpaidData } = await supabaseClient.from('monthly_records').select('calculated_fee').eq('status', 'unpaid');
             let unpaidSum = 0;
             if (unpaidData) unpaidData.forEach(u => unpaidSum += parseFloat(u.calculated_fee));
@@ -1516,112 +1509,55 @@
             if (data && data.length > 0) {
                 data.forEach(h => {
                     const vText = String(h.village_no) === '0' ? 'นอกเขต (หมู่ 0)' : `หมู่ที่ ${h.village_no}`;
+                    const typeBadge = h.customer_type === 'business' ? '<span class="px-2 py-0.5 bg-purple-100 text-purple-800 rounded text-xs font-bold">กิจการ</span>' : '<span class="px-2 py-0.5 bg-blue-100 text-blue-800 rounded text-xs font-bold">ครัวเรือน</span>';
+                    const detail = h.customer_type === 'business' ? 'ตามน้ำหนัก/ลิตร' : `${h.bin_count || 1} ถัง (${(h.bin_count || 1)*15} ฿)`;
+
                     tbody.innerHTML += `
                         <tr class="hover:bg-stone-50">
                             <td class="p-3">${h.house_number}</td>
                             <td class="p-3">${vText}</td>
                             <td class="p-3 font-medium">${h.owner_name}</td>
-                            <td class="p-3">${h.phone || '-'}</td>
-                            <td class="p-3">${h.bin_count || 1} ใบ</td>
+                            <td class="p-3">${typeBadge}</td>
+                            <td class="p-3 text-xs">${detail}</td>
                             <td class="p-3 text-center space-x-2">
-                                <button onclick="editHousehold('${h.id}')" class="bg-amber-500 hover:bg-amber-600 text-white px-2.5 py-1 rounded text-xs">แก้ไข</button>
-                                <button onclick="deleteHousehold('${h.id}')" class="bg-red-500 hover:bg-red-600 text-white px-2.5 py-1 rounded text-xs">ลบ</button>
+                                <button onclick="editHousehold('${h.id}')" class="bg-amber-500 text-white px-2.5 py-1 rounded text-xs">แก้ไข</button>
+                                <button onclick="deleteHousehold('${h.id}')" class="bg-red-500 text-white px-2.5 py-1 rounded text-xs">ลบ</button>
                             </td>
                         </tr>
                     `;
                 });
             } else {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-stone-500">ไม่พบข้อมูลครัวเรือน</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-stone-500">ไม่พบข้อมูล</td></tr>`;
             }
         }
 
         function filterHouseholdRegistry() {
             const keyword = document.getElementById('search-household-registry').value.toLowerCase();
-            const filtered = allHouseholds.filter(h => {
-                const house = h.house_number?.toLowerCase() || '';
-                const owner = h.owner_name?.toLowerCase() || '';
-                const village = h.village_no?.toString() || '';
-                return house.includes(keyword) || owner.includes(keyword) || village.includes(keyword);
-            });
+            const filtered = allHouseholds.filter(h => h.house_number?.toLowerCase().includes(keyword) || h.owner_name?.toLowerCase().includes(keyword));
             renderHouseholdTable(filtered);
         }
 
         function exportHouseholdsExcel() {
-            if (!allHouseholds || allHouseholds.length === 0) {
-                alert('ไม่มีข้อมูลสำหรับส่งออก');
-                return;
-            }
-            const exportData = allHouseholds.map((h, index) => ({
-                "ลำดับ": index + 1,
-                "บ้านเลขที่": h.house_number,
-                "หมู่บ้าน": String(h.village_no) === '0' ? 'นอกเขต (หมู่ 0)' : `หมู่ที่ ${h.village_no}`,
-                "ชื่อเจ้าบ้าน": h.owner_name,
-                "เบอร์โทรศัพท์": h.phone || '-',
-                "จำนวนถังขยะ (ใบ)": h.bin_count || 1
+            if (!allHouseholds || allHouseholds.length === 0) return alert('ไม่มีข้อมูล');
+            const exportData = allHouseholds.map((h, i) => ({
+                "ลำดับ": i + 1, "บ้านเลขที่": h.house_number, "หมู่บ้าน": h.village_no, "ชื่อ": h.owner_name, "ประเภท": h.customer_type, "ถังขยะ": h.bin_count || 1, "โทร": h.phone || '-'
             }));
-
             const wb = XLSX.utils.book_new();
-            const ws = XLSX.utils.json_to_sheet(exportData);
-            XLSX.utils.book_append_sheet(wb, ws, "ทะเบียนครัวเรือน");
-            XLSX.writeFile(wb, "household_registry_report.xlsx");
+            XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(exportData), "Households");
+            XLSX.writeFile(wb, "household_registry.xlsx");
         }
 
         async function backupAllTablesToExcel() {
-            try {
-                alert('กำลังดึงข้อมูลทั้งหมดจากระบบเพื่อสำรองข้อมูล กรุณารอสักครู่...');
-                const { data: houses } = await supabaseClient.from('households').select('*');
-                const { data: records } = await supabaseClient.from('monthly_records').select('*, households(house_number, village_no, owner_name)');
-                const { data: invoices } = await supabaseClient.from('invoices_history').select('*, households(house_number, village_no, owner_name)');
+            const { data: houses } = await supabaseClient.from('households').select('*');
+            const { data: records } = await supabaseClient.from('monthly_records').select('*, households(*)');
+            const { data: invoices } = await supabaseClient.from('invoices_history').select('*, households(*)');
 
-                const wb = XLSX.utils.book_new();
-
-                const wsHouses = XLSX.utils.json_to_sheet(houses || []);
-                XLSX.utils.book_append_sheet(wb, wsHouses, "Households");
-
-                const formattedRecords = (records || []).map(r => ({
-                    id: r.id,
-                    household_id: r.household_id,
-                    house_number: r.households?.house_number,
-                    village_no: r.households?.village_no,
-                    owner_name: r.households?.owner_name,
-                    month: r.month,
-                    year_th: r.year_th,
-                    daily_volume: r.daily_volume,
-                    calculated_fee: r.calculated_fee,
-                    status: r.status,
-                    paid_at: r.paid_at,
-                    payment_method: r.payment_method,
-                    receipt_no: r.receipt_no,
-                    created_at: r.created_at
-                }));
-                const wsRecords = XLSX.utils.json_to_sheet(formattedRecords);
-                XLSX.utils.book_append_sheet(wb, wsRecords, "Monthly_Records");
-
-                const formattedInvoices = (invoices || []).map(inv => ({
-                    id: inv.id,
-                    invoice_no: inv.invoice_no,
-                    household_id: inv.household_id,
-                    house_number: inv.households?.house_number,
-                    village_no: inv.households?.village_no,
-                    owner_name: inv.households?.owner_name,
-                    start_month: inv.start_month,
-                    start_year: inv.start_year,
-                    end_month: inv.end_month,
-                    end_year: inv.end_year,
-                    total_months: inv.total_months,
-                    total_amount: inv.total_amount,
-                    status: inv.status,
-                    created_at: inv.created_at
-                }));
-                const wsInvoices = XLSX.utils.json_to_sheet(formattedInvoices);
-                XLSX.utils.book_append_sheet(wb, wsInvoices, "Invoices_History");
-
-                const dateStr = new Date().toISOString().slice(0, 10);
-                XLSX.writeFile(wb, `waste_system_backup_${dateStr}.xlsx`);
-                alert('สำรองข้อมูลทุกตารางเป็นไฟล์ Excel สำเร็จเรียบร้อยครับ!');
-            } catch (err) {
-                alert('เกิดข้อผิดพลาดในการสำรองข้อมูล: ' + err.message);
-            }
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(houses || []), "Households");
+            XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(records || []), "Monthly_Records");
+            XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(invoices || []), "Invoices_History");
+            XLSX.writeFile(wb, `waste_system_backup_${new Date().toISOString().slice(0,10)}.xlsx`);
+            alert('สำรองข้อมูลสำเร็จ!');
         }
 
         checkAuth();
