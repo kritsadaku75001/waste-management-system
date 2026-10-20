@@ -91,7 +91,7 @@
                             <h3 id="stat-total-houses" class="text-3xl font-bold text-[#2E5A44] mt-2">0</h3>
                         </div>
                         <div class="bg-white p-6 rounded-xl shadow-sm border border-[#EBE3D8]">
-                            <p class="text-sm text-stone-500">ใบแจ้งหนี้ที่ออกแล้ว</p>
+                            <p class="text-sm text-stone-500">ใบแจ้งหนี้ที่ค้างชำระ</p>
                             <h3 id="stat-total-invoices" class="text-3xl font-bold text-emerald-600 mt-2">0</h3>
                         </div>
                         <div class="bg-white p-6 rounded-xl shadow-sm border border-[#EBE3D8]">
@@ -119,7 +119,8 @@
                                     <th class="p-3">หมู่บ้าน</th>
                                     <th class="p-3">ชื่อเจ้าบ้าน / กิจการ</th>
                                     <th class="p-3">ประเภท</th>
-                                    <th class="p-3">ถังขยะ / อัตรา</th>
+                                    <th class="p-3 text-center">จำนวนถังขยะ</th>
+                                    <th class="p-3 text-right">อัตราค่าบริการ (บาท/เดือน)</th>
                                     <th class="p-3 text-center">จัดการ</th>
                                 </tr>
                             </thead>
@@ -380,12 +381,12 @@
                     </div>
                 </div>
 
-                <!-- หน้าออกใบแจ้งหนี้ / พิมพ์ A4 (แยกครัวเรือนและกิจการ) -->
+                <!-- หน้าออกใบแจ้งหนี้ / พิมพ์ A4 -->
                 <div id="tab-invoicing" class="hidden space-y-6">
                     <h2 class="text-xl font-bold text-[#1B3B2B]">ออกใบแจ้งหนี้และพิมพ์เอกสาร A4</h2>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- ส่วนที่ 1: ออกใบแจ้งหนี้ครัวเรือนแบบกลุ่ม (รวบยอด 3, 6 เดือน ฯลฯ) -->
+                        <!-- ส่วนที่ 1: ออกใบแจ้งหนี้ครัวเรือนแบบกลุ่ม -->
                         <div class="bg-white p-6 rounded-xl shadow-sm border border-[#EBE3D8] space-y-4">
                             <h3 class="font-bold text-md text-[#2E5A44] border-b pb-2">🏠 ออกใบแจ้งหนี้ "ครัวเรือน" (รวบยอดกลุ่ม)</h3>
                             <p class="text-xs text-stone-500">เลือกช่วงเดือนและหมู่บ้านเพื่อออกใบแจ้งหนี้ครัวเรือนพร้อมกันทีเดียวทั้งหมด</p>
@@ -435,7 +436,7 @@
                             </button>
                         </div>
 
-                        <!-- ส่วนที่ 2: ออกใบแจ้งหนี้กิจการ (รายเดี่ยวจากขยะที่บันทึก) -->
+                        <!-- ส่วนที่ 2: ออกใบแจ้งหนี้กิจการ (รายเดี่ยว) -->
                         <div class="bg-white p-6 rounded-xl shadow-sm border border-[#EBE3D8] space-y-4">
                             <h3 class="font-bold text-md text-[#2E5A44] border-b pb-2">🏢 ออกใบแจ้งหนี้ "กิจการ" (รายเดี่ยว)</h3>
                             <p class="text-xs text-stone-500">เลือกกิจการที่บันทึกปริมาณขยะประจำเดือนแล้วเพื่อออกใบแจ้งหนี้</p>
@@ -654,9 +655,8 @@
 
         let currentPaymentFilter = 'all';
         let allHouseholds = [];
-        let allWasteRecords = [];
+        let allBusinessHouseholds = [];
         let allInvoiceHistory = [];
-        let rawReportData = [];
 
         async function handleLogin(event) {
             event.preventDefault();
@@ -814,7 +814,7 @@
         // --- ส่วนจัดการขยะกิจการ ---
         async function populateBusinessDropdown() {
             const { data } = await supabaseClient.from('households').select('*').eq('customer_type', 'business').order('village_no');
-            allHouseholds = data || [];
+            allBusinessHouseholds = data || [];
             const select = document.getElementById('invoice-business-id');
             const wasteSelect = document.getElementById('waste-household-id');
             let opts = '<option value="">-- เลือกกิจการ --</option>';
@@ -830,7 +830,7 @@
         function filterBusinessDropdown() {
             const keyword = document.getElementById('search-invoice-business').value.toLowerCase();
             const select = document.getElementById('invoice-business-id');
-            const filtered = allHouseholds.filter(h => h.house_number?.toLowerCase().includes(keyword) || h.owner_name?.toLowerCase().includes(keyword));
+            const filtered = allBusinessHouseholds.filter(h => h.house_number?.toLowerCase().includes(keyword) || h.owner_name?.toLowerCase().includes(keyword));
             let opts = '<option value="">-- เลือกกิจการ --</option>';
             filtered.forEach(h => {
                 opts += `<option value="${h.id}">บ้านเลขที่ ${h.house_number} หมู่ ${h.village_no} (${h.owner_name})</option>`;
@@ -841,7 +841,7 @@
         function filterWasteHouseholdDropdown() {
             const keyword = document.getElementById('search-waste-household').value.toLowerCase();
             const select = document.getElementById('waste-household-id');
-            const filtered = allHouseholds.filter(h => h.house_number?.toLowerCase().includes(keyword) || h.owner_name?.toLowerCase().includes(keyword));
+            const filtered = allBusinessHouseholds.filter(h => h.house_number?.toLowerCase().includes(keyword) || h.owner_name?.toLowerCase().includes(keyword));
             let opts = '<option value="">-- เลือกกิจการ --</option>';
             filtered.forEach(h => {
                 opts += `<option value="${h.id}">บ้านเลขที่ ${h.house_number} หมู่ ${h.village_no} (${h.owner_name})</option>`;
@@ -942,7 +942,6 @@
 
             const totalMonths = (endVal - startVal) + 1;
 
-            // ดึงครัวเรือนทั้งหมด
             let query = supabaseClient.from('households').select('*').eq('customer_type', 'household');
             if (village !== 'all') query = query.eq('village_no', village);
 
@@ -1035,7 +1034,7 @@
                     const actionBtns = isCancelled ? `-` : `
                         <button onclick="printInvoice('${inv.id}')" class="bg-blue-600 text-white px-2.5 py-1 rounded text-xs">พิมพ์ A4</button>
                         ${!isPaid ? `<button onclick="openPaymentModal('${inv.id}', '${inv.invoice_no}', '${inv.households?.owner_name}', ${inv.total_amount})" class="bg-emerald-600 text-white px-2.5 py-1 rounded text-xs">รับเงิน</button>` : ''}
-                        <button onclick="cancelInvoice('${inv.id}')" class="bg-red-500 text-white px-2 py-1 rounded text-xs">ยกเลิก</button>
+                        <button onclick="cancelInvoice('${inv.id}')" class="bg-red-500 text-white px-2.5 py-1 rounded text-xs">ยกเลิก</button>
                     `;
 
                     tbody.innerHTML += `
@@ -1184,32 +1183,40 @@
         async function loadHouseholds() {
             const { data } = await supabaseClient.from('households').select('*').order('village_no');
             allHouseholds = data || [];
+            renderHouseholdTable(allHouseholds);
+        }
+
+        function renderHouseholdTable(data) {
             const tbody = document.getElementById('household-table-body');
             tbody.innerHTML = '';
             if (data && data.length > 0) {
                 data.forEach(h => {
                     const typeBadge = h.customer_type === 'business' ? '<span class="px-2 py-0.5 bg-purple-100 text-purple-800 rounded text-xs font-bold">กิจการ</span>' : '<span class="px-2 py-0.5 bg-blue-100 text-blue-800 rounded text-xs font-bold">ครัวเรือน</span>';
+                    const binCountDisplay = h.customer_type === 'business' ? '-' : `${h.bin_count || 1} ถัง`;
+                    const rateDisplay = h.customer_type === 'business' ? 'ตามปริมาณขยะ (ลิตร)' : `${((h.bin_count || 1) * 15).toLocaleString()} บาท`;
+
                     tbody.innerHTML += `
                         <tr class="hover:bg-stone-50">
                             <td class="p-3">${h.house_number}</td>
                             <td class="p-3">หมู่ที่ ${h.village_no}</td>
                             <td class="p-3 font-medium">${h.owner_name}</td>
                             <td class="p-3">${typeBadge}</td>
-                            <td class="p-3 text-xs">${h.customer_type === 'business' ? 'ตามน้ำหนัก' : `${h.bin_count || 1} ถัง (${(h.bin_count||1)*15} ฿/เดือน)`}</td>
+                            <td class="p-3 text-center font-semibold">${binCountDisplay}</td>
+                            <td class="p-3 text-right font-bold text-[#2E5A44]">${rateDisplay}</td>
                             <td class="p-3 text-center space-x-1">
-                                <button onclick="editHousehold('${h.id}')" class="bg-amber-500 text-white px-2 py-1 rounded text-xs">แก้ไข</button>
-                                <button onclick="deleteHousehold('${h.id}')" class="bg-red-500 text-white px-2 py-1 rounded text-xs">ลบ</button>
+                                <button onclick="editHousehold('${h.id}')" class="bg-amber-500 text-white px-2.5 py-1 rounded text-xs">แก้ไข</button>
+                                <button onclick="deleteHousehold('${h.id}')" class="bg-red-500 text-white px-2.5 py-1 rounded text-xs">ลบ</button>
                             </td>
                         </tr>
                     `;
                 });
-            } else { tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-stone-500">ไม่พบข้อมูล</td></tr>`; }
+            } else { tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-stone-500">ไม่พบข้อมูล</td></tr>`; }
         }
 
         function filterHouseholdRegistry() {
             const keyword = document.getElementById('search-household-registry').value.toLowerCase();
-            const filtered = allHouseholds.filter(h => h.house_number?.toLowerCase().includes(keyword) || h.owner_name?.toLowerCase().includes(keyword));
-            // render table simplified
+            const filtered = allHouseholds.filter(h => h.house_number?.toLowerCase().includes(keyword) || h.owner_name?.toLowerCase().includes(keyword) || h.village_no?.toString().includes(keyword));
+            renderHouseholdTable(filtered);
         }
 
         async function backupAllTablesToExcel() {
